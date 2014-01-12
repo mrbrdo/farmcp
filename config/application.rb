@@ -41,8 +41,6 @@ module CoinProfit
     config.sequel.schema_format = :ruby
 
     initializer 'app.sequel_setup', after: 'sequel.connect' do
-      Sequel::Model.db.extension :pg_hstore
-      Sequel::Model.db.extension :pg_array
       Sequel::Model.db.extension :pagination
       Sequel::Model.plugin :timestamps, update_on_create: true
       Sequel::Model.plugin :association_proxies

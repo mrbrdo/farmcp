@@ -1,13 +1,11 @@
 development:
-  adapter: postgresql
-  encoding: unicode
-  database: coin_profit
-  pool: 5
-  host: localhost
+  adapter: sqlite3
+  database: db/development.db
 
 test:
-  adapter: postgresql
-  encoding: unicode
-  database: coin_profit_test
-  pool: 5
-  host: localhost
+  adapter: sqlite3
+  database: db/test.db
+
+production:
+  adapter: sqlite3
+  database: db/production.db
