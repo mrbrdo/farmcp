@@ -6,7 +6,7 @@ $ ->
     "$" + (hashrate_mh * value * btc_value).format(precision)
 
   updateData = ->
-    $.getJSON '/coins.json', (data)->
+    $.getJSON '/data.json', (data)->
       btc_value = data.btc_value
       $('#btc_value h2').text("$#{btc_value.format(0)}")
 
@@ -58,9 +58,7 @@ $ ->
         if col > 4
           row += 1
           col = 1
-        $li = $("<li data-row='#{row}' data-col='#{col}' data-sizex='1' data-sizey='1' class='gs_w'></li>")
-        $div = $("<div id='rig_info_#{rigIdx}' class='widget widget-list buzzwords'></div>")
-        $div.appendTo($li)
+        $div = $("<div id='rig_info_#{rigIdx}' class='square-1 purple-square'></div>")
         $div.append("<h1 class='title'>Rig ##{rigIdx}</h1>")
         $ul = $("<ul class='list-nostyle'></ul>")
         total_hashrate = 0
@@ -72,7 +70,7 @@ $ ->
           $info_li.css("font-size", "15px")
         $div.find("h1").text("Rig ##{rigIdx} - " + displayHashrate(total_hashrate))
         $ul.appendTo($div)
-        $('.gridster > ul').append($li)
+        $('#dashboard').append($div)
 
 
   setInterval(updateData, 30000)
