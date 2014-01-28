@@ -13,7 +13,6 @@ gem 'pry-rails'
 gem 'mina'
 gem 'mina-extras', github: "mrbrdo/mina-extras"
 gem 'puma'
-gem 'dashing-rails'
 gem 'dotenv-rails'
 
 # Platform-dependent
