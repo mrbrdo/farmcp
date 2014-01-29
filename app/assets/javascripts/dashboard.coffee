@@ -2,15 +2,20 @@
 #= require sugar
 
 btc_value = null
+use_btc_value = "btcde"
 hashrate_mh = 4.85
 
 toDollars = (value, precision = 2)->
-  "$" + (hashrate_mh * value * btc_value).format(precision)
+  if use_btc_value == "btcde"
+    (hashrate_mh * value * btc_value[use_btc_value]).format(precision) + "€"
+  else
+    "$" + (hashrate_mh * value * btc_value[use_btc_value]).format(precision)
 
 updateData = ->
   $.getJSON '/data.json', (data)->
     btc_value = data.btc_value
-    $('#btc_value h2').text("$#{btc_value.format(0)}")
+    $('#btc_value h2.bitstamp').text("$#{btc_value.bitstamp.format(0)}")
+    $('#btc_value h2.btcde').html("#{btc_value.btcde.format(0)}&euro;")
 
     appendBuzzwordsLi = ($ul, title, value)->
       $li = $("<li></li>")
