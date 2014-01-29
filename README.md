@@ -22,7 +22,7 @@ script/puma start
 
 * Note: the first time you open it after installing, it can take **a few minutes** to open.
 * Now you can open the web app at `http://YOUR-RIG-IP:8080/`
-* In case your port 8080 is already taken (e.g. SMOS Linux), you can change the port in config/puma.rb near the bottom of the file.
+* In case your port 8080 is already taken (e.g. SMOS Linux), you can change the port in config/puma.rb near the bottom of the file and run `script/puma restart`
 
 ## Configure
 
