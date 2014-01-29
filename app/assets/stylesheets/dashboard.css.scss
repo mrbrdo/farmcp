@@ -1,0 +1,104 @@
+#rig_overview {
+  background-color: #9c4274;
+}
+
+#rig_hashrate {
+  background-color: #ec663c;
+}
+
+#rig_pools ul li {
+  font-size: 12px;
+  height: 40px;
+}
+
+div[id*=rig_info_] {
+  background-color: #9c4274;
+}
+
+body {
+  background-color: #222;
+}
+
+#dashboard {
+  font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  text-align: center;
+  color: white;
+  width: 1250px;
+  margin: 0 auto;
+
+  h1, h2, h3 {
+    padding: 0;
+    margin: 0;
+  }
+
+  a, a:hover, a:active, a:visited {
+    color: white;
+    font-size: 16px;
+  }
+
+  .orange-square {
+    background-color: #ec663c;
+  }
+  .cyan-square {
+    background-color: #47bbb3;
+  }
+  .blue-square {
+    background-color: #12b0c5;
+  }
+  .purple-square {
+    background-color: #9c4274;
+  }
+
+  .square-1 {
+    width: 276px;
+    height: 310px;
+    margin: 5px;
+    padding: 25px 12px;
+    vertical-align: middle;
+    float: left;
+
+    h1 {
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 12px;
+      text-align: center;
+      font-size: 30px;
+      font-weight: 400;
+    }
+
+    h2 {
+      text-transform: uppercase;
+      font-size: 76px;
+      font-weight: 700;
+      color: white;
+    }
+
+    h3 {
+      font-weight: 500;
+      font-size: 30px;
+      color: white;
+    }
+
+    ul.list-nostyle {
+      list-style: none;
+      margin: 0 15px;
+      text-align: left;
+      color: rgba(255, 255, 255, 0.7);
+      padding: 0;
+
+      li {
+        margin-bottom: 5px;
+      }
+    }
+
+    span.label {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    span.value {
+      float: right;
+      margin-left: 12px;
+      font-weight: 600;
+      color: white;
+    }
+  }
+}

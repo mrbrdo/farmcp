@@ -1,0 +1,10 @@
+!!!
+%html
+  %head
+    %title Rig Dashboard
+    = stylesheet_link_tag    "dashboard", media: "all"
+    %link{href: "http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700", rel: "stylesheet", type: "text/css"}/
+    = csrf_meta_tags
+  %body
+    = yield
+    = javascript_include_tag "dashboard"

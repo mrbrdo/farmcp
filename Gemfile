@@ -15,6 +15,8 @@ gem 'mina-extras', github: "mrbrdo/mina-extras"
 gem 'puma'
 gem 'dotenv-rails'
 
+gem 'foundation-rails'
+
 # Platform-dependent
 platforms(:jruby)   { gem 'jdbc-sqlite3' }
 platforms(:ruby)    { gem 'sqlite3' }

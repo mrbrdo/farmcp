@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   def dashboard
+    render 'dashboard', layout: 'dashboard'
   end
 
   def data
