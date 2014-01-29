@@ -19,7 +19,7 @@ bundle install
 script/puma start
 ```
 
-Now you can open the web app at http://YOUR-RIG-IP:8080/
+Now you can open the web app at `http://YOUR-RIG-IP:8080/`
 
 The first time you open it after installing, it can take **a few minutes** to open.
 
