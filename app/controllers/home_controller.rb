@@ -23,23 +23,10 @@ private
     JSON.load(mtgox_data)["last"].to_f
   end
 
-  def miners
-    if conf = json_config
-      conf["rigs"].map do |rig|
-        addr = rig.strip.split(":")
-        if addr[0].present?
-          OpenStruct.new(host: addr[0], port: (addr[1] || 4028).to_i)
-        end
-      end
-    else
-      []
-    end
-  end
-
   def get_rig_info
     rig_data = miners.map do |miner|
       begin
-        rpc = CgminerRpc.new(miner.host, miner.port)
+        rpc = miner.rpc
         dev_keys = {
           temp: "Temperature",
           fan_p: "Fan Percent",

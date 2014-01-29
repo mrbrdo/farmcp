@@ -5,6 +5,19 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate
 
 protected
+  def miners
+    @miners ||= if conf = json_config
+      conf["rigs"].map do |rig|
+        addr = rig.strip.split(":")
+        if addr[0].present?
+          Miner.new(addr[0], (addr[1] || 4028).to_i)
+        end
+      end
+    else
+      []
+    end
+  end
+
   def json_config
     conf_file = File.expand_path("~/.farmcp")
     if File.exist?(conf_file)

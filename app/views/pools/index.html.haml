@@ -1,2 +1,36 @@
-%h1 Pools#index
-%p Find me in app/views/pools/index.html.haml
+%h1 Pools
+
+%table
+  %tr
+    %th Rig
+    %th Pool
+    %th &nbsp;
+  - @pools.each_pair do |rig, pool_data|
+    %tr
+      = form_tag switch_pools_url, method: "put" do
+        %td= rig.to_s
+        %td
+          = hidden_field_tag("rig_id", rig.id)
+          = select_tag("pool", pool_select_options(pool_data))
+        %td= submit_tag("Save")
+
+%h2 Add pool to all rigs
+= form_tag pools_url, method: "post" do
+  .row
+    .large-1.columns
+      = label_tag 'url', 'Url', class: 'inline'
+    .large-4.columns.left
+      = text_field_tag :url
+  .row
+    .large-1.columns
+      = label_tag 'user', 'Username', class: 'inline'
+    .large-4.columns.left
+      = text_field_tag :user
+  .row
+    .large-1.columns
+      = label_tag 'pass', 'Password', class: 'inline'
+    .large-4.columns.left
+      = text_field_tag :pass
+  .row
+    .large-7.columns.text-right
+      = submit_tag "Add", class: "small success button"
