@@ -44,3 +44,10 @@ Example config:
 "api-allow" : "W:192.168.1.0/24",
 "api-port" : "4028",
 ```
+
+After you change the config, restart the app:
+
+```
+cd ~/farmcp
+script/puma restart
+```
