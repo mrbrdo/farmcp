@@ -1,4 +1,6 @@
-# Install
+# FarmCP - Mining Farm management web-app
+
+## Install
 
 Tested on BAMT 1.3 with cgminer (or sgminer).
 
@@ -19,7 +21,7 @@ script/puma start
 
 Now you can open the web app at http://YOUR-RIG-IP:8080/
 
-# Configure
+## Configure
 
 Edit or create a file in your home folder: `.farmcp`
 
