@@ -9,7 +9,7 @@ module PoolsHelper
 
   def pool_to_option(pool)
     OpenStruct.new(
-      title: "#{pool["URL"]} (#{pool["User"]})",
+      title: "#{pool["Priority"]}: #{pool["URL"]} (#{pool["User"]})",
       value: pool["POOL"]
       )
   end

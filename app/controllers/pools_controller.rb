@@ -27,7 +27,9 @@ private
     miners.each do |miner|
       begin
         rpc = miner.rpc
-        data[miner] = rpc.cmd_pools["POOLS"]
+        data[miner] = rpc.cmd_pools["POOLS"].sort_by do |pool|
+          pool["Priority"]
+        end
       rescue StandardError
         nil
       end
