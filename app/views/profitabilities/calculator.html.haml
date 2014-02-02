@@ -15,7 +15,7 @@
     .large-2.columns
       = label_tag 'btc_value', 'BTC in USD', class: 'inline'
     .large-4.columns.left
-      = text_field_tag :btc_value, get_btc_value[:bitstamp]
+      = text_field_tag :btc_value, @btc_value[:bitstamp]
   .row
     %h3 1) enter data manually
   .row

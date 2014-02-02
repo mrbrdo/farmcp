@@ -7,8 +7,8 @@ class HomeController < ApplicationController
     rig_info = get_rig_info
 
     data = {
-      btc_value: get_btc_value,
-      rig_info: get_rig_info,
+      btc_value: BtcValue.get,
+      rig_info: rig_info,
       rig_overview: get_rig_overview(rig_info)
     }
 
@@ -19,38 +19,7 @@ class HomeController < ApplicationController
 
 private
   def get_rig_info
-    rig_data = miners.map do |miner|
-      begin
-        rpc = miner.rpc
-        dev_keys = {
-          temp: "Temperature",
-          fan_p: "Fan Percent",
-          mhs: "MHS 5s",
-          accepted: "Accepted",
-          rejected: "Rejected"
-        }
-        devs = rpc.cmd_devs["DEVS"].map do |dev|
-          Hash.new.tap do |h|
-            dev_keys.each_pair do |k, v|
-              h[k] = dev[v]
-            end
-          end
-        end
-        pool = rpc.cmd_pools["POOLS"].max_by do |pool|
-          pool["Last Share Time"] || 0
-        end
-        {
-          host: miner.host,
-          port: miner.port,
-          devs: devs,
-          pool: pool["URL"]
-        }
-      rescue StandardError
-        nil
-      end
-    end
-
-    rig_data.compact
+    Miner.all.map(&:get_info).compact
   end
 
   def get_rig_overview(rig_info)

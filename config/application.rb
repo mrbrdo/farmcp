@@ -23,6 +23,7 @@ Bundler.require(:default, Rails.env)
 module CoinProfit
   class Application < Rails::Application
     config.assets.precompile += %w( dashboard.css dashboard.js )
+    config.autoload_paths += %W(#{config.root}/app/services)
 
     config.generators do |g|
       g.orm :sequel

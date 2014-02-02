@@ -1,5 +1,6 @@
 class ProfitabilitiesController < ApplicationController
   def calculator
+    @btc_value = BtcValue.get
   end
 
   def pool_data
