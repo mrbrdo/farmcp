@@ -14,6 +14,8 @@ gem 'mina'
 gem 'mina-extras', github: "mrbrdo/mina-extras"
 gem 'puma'
 gem 'dotenv-rails'
+gem 'nokogiri'
+gem 'mechanize'
 
 gem 'foundation-rails'
 

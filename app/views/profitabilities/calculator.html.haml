@@ -1,0 +1,40 @@
+%h2 Profitability calculator
+= form_tag '?', id: "profitability_calculator_form" do
+  .row.profit_result{style: "font-size: 24px"}
+  .row
+    .large-2.columns
+      = label_tag 'price', 'Price (BTC)', class: 'inline'
+    .large-4.columns.left
+      = text_field_tag :price
+  .row
+    .large-2.columns
+      = label_tag 'hashrate', 'Hashrate (KH/s)', class: 'inline'
+    .large-4.columns.left
+      = text_field_tag :hashrate, "1000"
+  .row
+    .large-2.columns
+      = label_tag 'btc_value', 'BTC in USD', class: 'inline'
+    .large-4.columns.left
+      = text_field_tag :btc_value, get_btc_value[:bitstamp]
+  .row
+    %h3 1) enter data manually
+  .row
+    .large-2.columns
+      = label_tag 'diff', 'Difficulty', class: 'inline'
+    .large-4.columns.left
+      = text_field_tag :diff
+  .row
+    .large-2.columns
+      = label_tag 'reward', 'Block reward', class: 'inline'
+    .large-4.columns.left
+      = text_field_tag :reward
+  .row
+    %h3 2) or get data from pool
+  .row
+    .large-2.columns
+      = label_tag 'pool_url', 'MPOS pool URL', class: 'inline'
+    .large-4.columns.left
+      = text_field_tag :pool_url
+  .row
+    .large-7.columns.text-right
+      = submit_tag "Calculate", class: "small success button"
