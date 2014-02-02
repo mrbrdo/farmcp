@@ -24,6 +24,15 @@ script/puma start
 * Now you can open the web app at `http://YOUR-RIG-IP:8080/`
 * In case your port 8080 is already taken (e.g. SMOS Linux), you can change the port in config/puma.rb near the bottom of the file and run `script/puma restart`
 
+## Upgrade
+
+```
+cd ~/farmcp
+git pull
+bundle install
+script/puma restart
+```
+
 ## Configure
 
 Edit or create a file in your home folder: `.farmcp`
