@@ -1,0 +1,4 @@
+#!/bin/bash
+source /home/user/.rvm/gems/ruby-2.1.0@farmcp/environment
+app=$1; config=$2; log=$3;
+cd $app && exec bundle exec puma -C $config 2>&1 >> $log

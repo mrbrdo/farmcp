@@ -4,11 +4,16 @@
 
 Tested on BAMT 1.3 with cgminer (or sgminer).
 
+First install curl and git:
+
 ```
-sudo apt-get install curl
+sudo apt-get install curl git
+```
 
-# DO NOT DO THE FOLLOWING AS ROOT (i.e. do not use sudo)
+Now make sure you are not logged in as root (write `whoami`, it should not say root).
+Write the following commands, one line at a time:
 
+```
 \curl -sSL https://get.rvm.io | bash -s stable
 rvm install ruby-2.1.0
 
@@ -16,21 +21,23 @@ cd ~
 git clone https://github.com/mrbrdo/farmcp.git
 cd farmcp
 bundle install
-script/puma start
+rvmsudo ruby script/install-init-d.rb
 ```
 
-
 * Note: the first time you open it after installing, it can take **a few minutes** to open.
-* Now you can open the web app at `http://YOUR-RIG-IP:8080/`
-* In case your port 8080 is already taken (e.g. SMOS Linux), you can change the port in config/puma.rb near the bottom of the file and run `script/puma restart`
+* Now you can open the web app at `http://YOUR_RIG_IP:8085/`
 
 ## Upgrade
 
 ```
-cd ~/farmcp
-git pull
+sudo /etc/init.d/puma stop
+cd ~
+rm -rf farmcp
+
+git clone https://github.com/mrbrdo/farmcp.git
+cd farmcp
 bundle install
-script/puma restart
+rvmsudo ruby script/install-init-d.rb
 ```
 
 ## Configure
@@ -44,6 +51,7 @@ Edit or create a file in your home folder: `.farmcp`
 
 "username" : "user",
 "password" : "pass",
+"port" : 8085,
 "rigs" : [
   "192.168.1.2",
   "192.168.1.3:4055"
@@ -70,5 +78,5 @@ After you change the config, restart the app:
 
 ```
 cd ~/farmcp
-script/puma restart
+sudo /etc/init.d/puma restart
 ```
