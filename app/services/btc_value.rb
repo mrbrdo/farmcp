@@ -6,8 +6,22 @@ module BtcValue
     market_data = JSON.load(market_data_text)
 
     {
-      btcde: market_data.find { |d| d["symbol"] == "btcdeEUR" }.try!(:[], "avg").to_f,
-      bitstamp: market_data.find { |d| d["symbol"] == "bitstampUSD" }.try!(:[], "avg").to_f
+      btcde: calc_price(market_data.find { |d| d["symbol"] == "btcdeEUR" }),
+      bitstamp: calc_price(market_data.find { |d| d["symbol"] == "bitstampUSD" })
     }
+  end
+
+private
+  def calc_price(data)
+    return 0 unless data
+
+    bid = data["bid"].to_f
+    diff = data["ask"].to_f - bid
+
+    if diff > 0
+      bid + diff / 2
+    else
+      bid
+    end
   end
 end
