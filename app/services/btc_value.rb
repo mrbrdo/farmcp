@@ -9,6 +9,11 @@ module BtcValue
       btcde: calc_price(market_data.find { |d| d["symbol"] == "btcdeEUR" }),
       bitstamp: calc_price(market_data.find { |d| d["symbol"] == "bitstampUSD" })
     }
+  rescue
+    return {
+      btcde: 0.0,
+      bitstamp: 0.0
+    }
   end
 
 private
