@@ -5,6 +5,8 @@ btc_value = null
 use_btc_value = "btcde"
 hashrate_mh = 4.85
 
+ip_regex = "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+
 toDollars = (value, precision = 2)->
   if use_btc_value == "btcde"
     (hashrate_mh * value * btc_value[use_btc_value]).format(precision) + "€"
@@ -66,7 +68,7 @@ updateData = ->
         row += 1
         col = 1
       $div = $("<div id='rig_info_#{rigIdx}' class='square-1 purple-square'></div>")
-      $div.append("<h1 class='title'>Rig ##{rigIdx}</h1>")
+      $div.append("<h1 class='title'></h1>")
       $ul = $("<ul class='list-nostyle'></ul>")
       total_hashrate = 0
       rig.devs.each (dev, idx)->
@@ -75,7 +77,9 @@ updateData = ->
         reject_p = (100 * dev.rejected / dev.accepted).format(1)
         $info_li = appendBuzzwordsLi($ul, "A: #{dev.accepted} R: #{reject_p}%" , "F: #{dev.fan_p}% T: #{dev.temp} °C")
         $info_li.css("font-size", "15px")
-      $div.find("h1").text("Rig ##{rigIdx} - " + displayHashrate(total_hashrate))
+
+      rig_name = if rig.host.match(ip_regex) then "Rig ##{rigIdx}" else rig.host
+      $div.find("h1").text("#{rig_name} - #{displayHashrate(total_hashrate)}")
       $ul.appendTo($div)
       $('#dashboard').append($div)
 

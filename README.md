@@ -62,6 +62,7 @@ Edit or create a file in your home folder: `.farmcp`
 
 * username and password are optional, if you do not specify them, the web app will not be password protected.
 * Specify rig IPs in "rigs", you can also specify a custom port if it is not the default 4028. The rigs need to have cgminer RPC enabled in cgminer.conf
+* you can use hostnames for rigs (defined in .ssh/config) and they will be displayed in the dashboard instead of "Rig #number"
 
 **Cgminer config:**
 
