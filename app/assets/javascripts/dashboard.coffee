@@ -68,7 +68,8 @@ updateData = ->
         row += 1
         col = 1
       $div = $("<div id='rig_info_#{rigIdx}' class='square-1 purple-square'></div>")
-      $div.append("<h1 class='title'></h1>")
+      $div.append("<h1 class='rig_title'></h1>")
+      $div.append("<h3 class='pool'></h3>")
       $ul = $("<ul class='list-nostyle'></ul>")
       total_hashrate = 0
       rig.devs.each (dev, idx)->
@@ -79,7 +80,12 @@ updateData = ->
         $info_li.css("font-size", "15px")
 
       rig_name = if rig.name then rig.name else (if rig.host.match(ip_regex) then "Rig ##{rigIdx}" else rig.host)
-      $div.find("h1").text("#{rig_name} - #{displayHashrate(total_hashrate)}")
+      $title = $div.find("h1.rig_title")
+      $title.addClass("small") if rig_name.length > 6
+      $title.text("#{rig_name} - #{displayHashrate(total_hashrate)}")
+      
+      $div.find("h3.pool").text(rig.pool.split(':')[1])
+
       $ul.appendTo($div)
       $('#dashboard').append($div)
 
