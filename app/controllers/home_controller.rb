@@ -1,16 +1,22 @@
 class HomeController < ApplicationController
+
   def dashboard
     render 'dashboard', layout: 'dashboard'
   end
 
   def data
-    rig_info = get_rig_info
 
-    data = {
-      btc_value: BtcValue.get,
-      rig_info: rig_info,
-      rig_overview: get_rig_overview(rig_info)
-    }
+    data = if development?
+      JSON.parse(File.read('lib/demo_data.json'))
+    else
+      rig_info = get_rig_info
+
+      {
+        btc_value: BtcValue.get,
+        rig_info: rig_info,
+        rig_overview: get_rig_overview(rig_info)
+      }
+    end
 
     respond_to do |format|
       format.json { render json: data }
