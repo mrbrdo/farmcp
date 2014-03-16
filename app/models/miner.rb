@@ -46,6 +46,12 @@ class Miner
       pool = rpc.cmd_pools["POOLS"].max_by do |pool|
         pool["Last Share Time"] || 0
       end
+
+      avg = devs.count.zero?? 0 : devs.sum { |d| d[:mhs] } / devs.count
+      devs.each do |dev|
+        dev[:low_hash] = dev[:mhs] < (0.8 * avg)
+      end
+
       {
         host: host,
         port: port,

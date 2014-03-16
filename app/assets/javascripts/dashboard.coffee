@@ -74,7 +74,13 @@ updateData = ->
       total_hashrate = 0
       rig.devs.each (dev, idx)->
         total_hashrate += dev.mhs
-        appendBuzzwordsLi($ul, "GPU ##{idx + 1}", displayHashrate(dev.mhs))
+
+        $li = appendBuzzwordsLi($ul, "GPU ##{idx + 1}", displayHashrate(dev.mhs))
+        if(dev.mhs == 0)
+          $li.addClass("zero_hash_warning")
+        else if(dev.low_hash)
+          $li.addClass("low_hash_warning")
+
         reject_p = (100 * dev.rejected / dev.accepted).format(1)
         $info_li = appendBuzzwordsLi($ul, "A: #{dev.accepted} R: #{reject_p}%" , "F: #{dev.fan_p}% T: #{dev.temp} °C")
         $info_li.css("font-size", "15px")
@@ -84,7 +90,8 @@ updateData = ->
       $title.addClass("small") if rig_name.length > 6
       $title.text("#{rig_name} - #{displayHashrate(total_hashrate)}")
       
-      $div.find("h3.pool").text(rig.pool.split(':')[1])
+      stripped_pool = if rig.pool.split(':')[1] != undefined then rig.pool.split(':')[1].replace(/^\/\//, '') else ""
+      $div.find("h3.pool").text(stripped_pool)
 
       $ul.appendTo($div)
       $('#dashboard').append($div)

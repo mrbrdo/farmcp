@@ -68,6 +68,9 @@ body {
       &.rig_title {
         text-align: left;
         margin-bottom: 0px;
+        &.small {
+          font-size: 26px
+        }
       }
     }    
 
@@ -100,6 +103,12 @@ body {
 
       li {
         margin-bottom: 5px;
+        &.zero_hash_warning span.value {
+          color: #701000;
+        }
+        &.low_hash_warning span.value {
+          color: #eec823;
+        }
       }
     }
 
