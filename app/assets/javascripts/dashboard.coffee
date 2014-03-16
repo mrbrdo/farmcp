@@ -78,7 +78,7 @@ updateData = ->
         $info_li = appendBuzzwordsLi($ul, "A: #{dev.accepted} R: #{reject_p}%" , "F: #{dev.fan_p}% T: #{dev.temp} °C")
         $info_li.css("font-size", "15px")
 
-      rig_name = if rig.host.match(ip_regex) then "Rig ##{rigIdx}" else rig.host
+      rig_name = if rig.name then rig.name else (if rig.host.match(ip_regex) then "Rig ##{rigIdx}" else rig.host)
       $div.find("h1").text("#{rig_name} - #{displayHashrate(total_hashrate)}")
       $ul.appendTo($div)
       $('#dashboard').append($div)

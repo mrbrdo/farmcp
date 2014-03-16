@@ -55,14 +55,25 @@ Edit or create a file in your home folder: `.farmcp`
 "rigs" : [
   "192.168.1.2",
   "192.168.1.3:4055"
+],
+"names" : [
+	"miner1",
+	"miner2"
 ]
-
 }
 ```
 
 * username and password are optional, if you do not specify them, the web app will not be password protected.
 * Specify rig IPs in "rigs", you can also specify a custom port if it is not the default 4028. The rigs need to have cgminer RPC enabled in cgminer.conf
-* you can use hostnames for rigs (defined in .ssh/config) and they will be displayed in the dashboard instead of "Rig #number"
+* names are optional and you can also use hostnames like this:
+
+```json
+"rigs" : [
+  "miner1",
+  "miner2:4055"
+]
+```
+if there is no 'names' section and only IP addresses are provided in 'rigs' section the dashboard will display "Rig #number" instead of rig name
 
 **Cgminer config:**
 

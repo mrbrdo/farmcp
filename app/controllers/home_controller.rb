@@ -5,7 +5,6 @@ class HomeController < ApplicationController
   end
 
   def data
-
     data = if development?
       JSON.parse(File.read('lib/demo_data.json'))
     else

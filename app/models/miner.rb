@@ -1,9 +1,10 @@
 class Miner
-  attr_reader :host, :port
+  attr_reader :host, :port, :name
 
-  def initialize(host, port)
+  def initialize(host, port, name)
     @host = host
     @port = port
+    @name = name
   end
 
   def rpc
@@ -48,6 +49,7 @@ class Miner
       {
         host: host,
         port: port,
+        name: name,
         devs: devs,
         pool: pool["URL"]
       }
@@ -61,10 +63,11 @@ class Miner
   class << self
     def all
       if conf = JsonConfig.get
-        conf["rigs"].map do |rig|
+        names = Array(conf["names"])
+        conf["rigs"].each_with_index.map do |rig, num|
           addr = rig.strip.split(":")
           if addr[0].present?
-            new(addr[0], (addr[1] || 4028).to_i)
+            new(addr[0], (addr[1] || 4028).to_i, names[num])
           end
         end
       else
