@@ -6,7 +6,7 @@ class HomeController < ApplicationController
 
   def data
     data = if development?
-      JSON.parse(File.read('lib/demo_data.json'))
+      JSON.parse(File.read(Rails.root.join('app/data/demo_data.json')))
     else
       rig_info = get_rig_info
 

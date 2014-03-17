@@ -79,28 +79,31 @@ updateData = ->
         total_hashrate += dev.mhs
 
         $li = appendBuzzwordsLi($ul, "GPU ##{idx + 1}", displayHashrate(dev.mhs))
-        if(dev.mhs == 0)
+        if dev.mhs == 0
           $li.addClass("zero_hash_warning")
-        else if(dev.low_hash)
+        else if dev.low_hash
           $li.addClass("low_hash_warning")
 
         reject_p = (100 * dev.rejected / dev.accepted).format(1)
         $info_li = appendBuzzwordsLi($ul, "A: #{dev.accepted} R: #{reject_p}%" , "F: #{dev.fan_p}% T: #{dev.temp} °C")
         $info_li.css("font-size", "15px")
 
-      rig_name = if rig.name then rig.name else (if rig.host.match(ip_regex) then "Rig ##{rigIdx}" else rig.host)
+      rig_name = rig.name ? (if rig.host.match(ip_regex) then "Rig ##{rigIdx}" else rig.host)
       $title = $div.find("h1.rig_title")
       $title.addClass("small") if rig_name.length > 6
       $title.text("#{rig_name} - #{displayHashrate(total_hashrate)}")
 
-      stripped_pool = if rig.pool.split(':')[1] != undefined then rig.pool.split(':')[1].replace(/^\/\//, '') else ""
+      stripped_pool = if rig.pool.split(':')[1]?
+        rig.pool.split(':')[1].replace(/^\/\//, '')
+      else
+        ""
       $div.find("h3.pool").text(stripped_pool)
 
-      (rig.tags || []).each (tag) ->
+      rig.tags?.each (tag) ->
         unless tag == ""
-          $tag = $("<span class='tag'>#{tag}</span>")
-          $tag.addClass('gpu_type') if tag.match(/^\d+.?$/)
-          $div.find(".tags").append($tag)
+          $("<span class='tag'>#{tag}</span>")
+            .toggleClass('gpu_type', tag.match(/^\d+.?$/))
+            .appendTo($div.find(".tags"))
 
       $ul.appendTo($div)
       $('#dashboard').append($div)
