@@ -5,6 +5,15 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate
 
 protected
+
+  def production?
+    Rails.env == 'production'
+  end
+
+  def development?
+    Rails.env == 'development'
+  end
+
   def authenticate
     if conf = JsonConfig.get
       if conf["password"]

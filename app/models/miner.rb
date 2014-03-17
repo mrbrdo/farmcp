@@ -1,9 +1,11 @@
 class Miner
-  attr_reader :host, :port
+  attr_reader :host, :port, :name, :tags
 
-  def initialize(host, port)
+  def initialize(host, port, name, tags)
     @host = host
     @port = port
+    @name = name
+    @tags = tags
   end
 
   def rpc
@@ -27,40 +29,54 @@ class Miner
   end
 
   def get_info
-    dev_keys = {
-      temp: "Temperature",
-      fan_p: "Fan Percent",
-      mhs: "MHS 5s",
-      accepted: "Accepted",
-      rejected: "Rejected"
-    }
-    devs = rpc.cmd_devs["DEVS"].map do |dev|
-      Hash.new.tap do |h|
-        dev_keys.each_pair do |k, v|
-          h[k] = dev[v]
+    Timeout::timeout(2) do
+      dev_keys = {
+        temp: "Temperature",
+        fan_p: "Fan Percent",
+        mhs: "MHS 5s",
+        accepted: "Accepted",
+        rejected: "Rejected"
+      }
+      devs = rpc.cmd_devs["DEVS"].map do |dev|
+        Hash.new.tap do |h|
+          dev_keys.each_pair do |k, v|
+            h[k] = dev[v]
+          end
         end
       end
+      pool = rpc.cmd_pools["POOLS"].max_by do |pool|
+        pool["Last Share Time"] || 0
+      end
+
+      avg = devs.count.zero?? 0 : devs.sum { |d| d[:mhs] } / devs.count
+      devs.each do |dev|
+        dev[:low_hash] = dev[:mhs] < (0.8 * avg)
+      end
+
+      {
+        host: host,
+        port: port,
+        name: name,
+        tags: tags,
+        devs: devs,
+        pool: pool["URL"]
+      }
     end
-    pool = rpc.cmd_pools["POOLS"].max_by do |pool|
-      pool["Last Share Time"] || 0
-    end
-    {
-      host: host,
-      port: port,
-      devs: devs,
-      pool: pool["URL"]
-    }
+  rescue Timeout::Error
+    error(name || host, "timeout")
   rescue
-    nil
+    error(name || host, $!.message)
   end
 
   class << self
     def all
       if conf = JsonConfig.get
-        conf["rigs"].map do |rig|
+        names = Array(conf["names"])
+        tags = Array(conf["tags"])
+        conf["rigs"].each_with_index.map do |rig, num|
           addr = rig.strip.split(":")
           if addr[0].present?
-            new(addr[0], (addr[1] || 4028).to_i)
+            new(addr[0], (addr[1] || 4028).to_i, names[num], Array(tags[num]))
           end
         end
       else
@@ -68,4 +84,15 @@ class Miner
       end
     end
   end
+
+  private
+
+    def error(host, msg)
+      {
+        host: "#{host} - #{msg}",
+        devs: [],
+        pool: ""
+      }
+    end
+
 end
