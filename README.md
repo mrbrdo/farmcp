@@ -75,6 +75,17 @@ Edit or create a file in your home folder: `.farmcp`
 ```
 if there is no 'names' section and only IP addresses are provided in 'rigs' section the dashboard will display "Rig #number" instead of rig name
 
+**Tags**
+
+```json
+"tags" : [
+  "mom",
+  ["dad", "7950"]
+]
+```
+
+You can display tags for the rig. Normally they are blue but if they contain only numbers (like GPU type), they're cyan.
+
 **Cgminer config:**
 
 Replace 192.168.1.0 with your LAN, for example if your rig IP is 192.168.0.10, use 192.168.0.0:

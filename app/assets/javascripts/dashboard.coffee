@@ -69,7 +69,10 @@ updateData = ->
         col = 1
       $div = $("<div id='rig_info_#{rigIdx}' class='square-1 purple-square'></div>")
       $div.append("<h1 class='rig_title'></h1>")
-      $div.append("<h3 class='pool'></h3>")
+      $pool_info = $("<div class='pool_info'></div>")
+      $pool_info.append("<h3 class='pool'></h3>")
+      $pool_info.append("<span class='tags'></span>")
+      $div.append($pool_info)
       $ul = $("<ul class='list-nostyle'></ul>")
       total_hashrate = 0
       rig.devs.each (dev, idx)->
@@ -89,9 +92,15 @@ updateData = ->
       $title = $div.find("h1.rig_title")
       $title.addClass("small") if rig_name.length > 6
       $title.text("#{rig_name} - #{displayHashrate(total_hashrate)}")
-      
+
       stripped_pool = if rig.pool.split(':')[1] != undefined then rig.pool.split(':')[1].replace(/^\/\//, '') else ""
       $div.find("h3.pool").text(stripped_pool)
+
+      (rig.tags || []).each (tag) ->
+        unless tag == ""
+          $tag = $("<span class='tag'>#{tag}</span>")
+          $tag.addClass('gpu_type') if tag.match(/^\d+.?$/)
+          $div.find(".tags").append($tag)
 
       $ul.appendTo($div)
       $('#dashboard').append($div)

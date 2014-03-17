@@ -1,3 +1,11 @@
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
 #rig_overview {
   background-color: #9c4274;
 }
@@ -64,7 +72,7 @@ body {
       text-align: center;
       font-size: 30px;
       font-weight: 400;
-      
+
       &.rig_title {
         text-align: left;
         margin-bottom: 0px;
@@ -72,7 +80,7 @@ body {
           font-size: 26px
         }
       }
-    }    
+    }
 
     h2 {
       text-transform: uppercase;
@@ -81,16 +89,38 @@ body {
       color: white;
     }
 
-    h3 {
-      font-weight: 500;
-      font-size: 30px;
-      color: white;
-      
-      &.pool {      
-        font-size: 13px;
+    .pool_info {
+      @include clearfix;
+      h3 {
+        font-weight: 500;
+        font-size: 30px;
         color: white;
-        text-align: left;
-        margin: 0 0 10px 2px;
+        float: left;
+
+        &.pool {
+          font-size: 13px;
+          color: white;
+          text-align: left;
+          margin: 0 0 10px 2px;
+        }
+      }
+
+      .tags {
+        //margin-left: 20px;
+        float: right;
+        margin-top: -5px;
+        margin-right: 10px;
+        .tag {
+          background-color: #8699d5;
+          color: black;
+          font-size: 12px;
+          padding: 2px;
+          margin-right: 5px;
+          border-radius: 2px;
+          &.gpu_type {
+            background-color: #47bbb3;
+          }
+        }
       }
     }
 

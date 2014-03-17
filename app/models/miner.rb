@@ -1,10 +1,11 @@
 class Miner
-  attr_reader :host, :port, :name
+  attr_reader :host, :port, :name, :tags
 
-  def initialize(host, port, name)
+  def initialize(host, port, name, tags)
     @host = host
     @port = port
     @name = name
+    @tags = tags
   end
 
   def rpc
@@ -56,6 +57,7 @@ class Miner
         host: host,
         port: port,
         name: name,
+        tags: tags,
         devs: devs,
         pool: pool["URL"]
       }
@@ -70,10 +72,11 @@ class Miner
     def all
       if conf = JsonConfig.get
         names = Array(conf["names"])
+        tags = Array(conf["tags"])
         conf["rigs"].each_with_index.map do |rig, num|
           addr = rig.strip.split(":")
           if addr[0].present?
-            new(addr[0], (addr[1] || 4028).to_i, names[num])
+            new(addr[0], (addr[1] || 4028).to_i, names[num], Array(tags[num]))
           end
         end
       else
