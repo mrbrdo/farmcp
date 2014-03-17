@@ -101,9 +101,14 @@ updateData = ->
 
       rig.tags?.each (tag) ->
         unless tag == ""
-          $("<span class='tag'>#{tag}</span>")
-            .toggleClass('gpu_type', tag.match(/^\d+.?$/))
-            .appendTo($div.find(".tags"))
+          color = if tag.match(/^\d+.?$/)
+            "#47bbb3"
+          else if tag.indexOf(':') != -1
+            [tag, color] = tag.split(':')
+            color
+          else
+            "#8699d5"
+          $("<span class='tag'>#{tag}</span>").css('background-color', color).appendTo($div.find(".tags"))
 
       $ul.appendTo($div)
       $('#dashboard').append($div)

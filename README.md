@@ -79,12 +79,12 @@ if there is no 'names' section and only IP addresses are provided in 'rigs' sect
 
 ```json
 "tags" : [
-  "mom",
+  "mom:yellow",
   ["dad", "7950"]
 ]
 ```
 
-You can display tags for the rig. Normally they are blue but if they contain only numbers (like GPU type), they're cyan.
+You can display tags for the rig. Normally they are blue but if they contain only numbers (like GPU type), they're cyan. To set a custom color use ":color"
 
 **Cgminer config:**
 
