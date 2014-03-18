@@ -40,7 +40,7 @@ class Miner
       devs = rpc.cmd_devs["DEVS"].map do |dev|
         Hash.new.tap do |h|
           dev_keys.each_pair do |k, v|
-            h[k] = dev[v]
+            h[k] = k == :temp && !dev[v].nil? ? dev[v].round : dev[v]
           end
         end
       end
