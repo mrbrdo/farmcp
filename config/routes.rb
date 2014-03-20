@@ -9,6 +9,9 @@ CoinProfit::Application.routes.draw do
       put :switch
     end
   end
+
+  get 'rig/:name' => 'home#rig'
+
   get 'data' => 'home#data'
   root to: "home#dashboard"
 end

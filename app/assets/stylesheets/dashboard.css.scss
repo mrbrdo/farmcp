@@ -35,6 +35,10 @@ body {
   width: 1250px;
   margin: 0 auto;
 
+  .link {
+    display: none;
+  }
+
   h1, h2, h3 {
     padding: 0;
     margin: 0;
@@ -116,6 +120,11 @@ body {
           padding: 2px;
           margin-right: 5px;
           border-radius: 2px;
+          a {
+            text-decoration: none;
+            font-size: 12px;
+            color: black;
+          }
         }
       }
     }

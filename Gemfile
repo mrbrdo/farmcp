@@ -25,5 +25,10 @@ group :production do
   platforms(:ruby)  { gem "therubyracer", :require => 'v8' }
 end
 
+group :development do
+  gem "better_errors"
+  gem "binding_of_caller"
+end
+
 # DB
 gem 'sequel-rails'
