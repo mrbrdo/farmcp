@@ -79,12 +79,36 @@ if there is no 'names' section and only IP addresses are provided in 'rigs' sect
 
 ```json
 "tags" : [
-  "mom",
+  "mom:yellow",
   ["dad", "7950"]
 ]
 ```
 
-You can display tags for the rig. Normally they are blue but if they contain only numbers (like GPU type), they're cyan.
+You can display tags for the rig. Normally they are blue but if they contain only numbers (like GPU type), they're cyan. To set a custom color use ":color"
+
+**Direct links to rigs**
+
+```json
+"links" : [
+  "",
+  "dad"
+]
+```
+
+Dad's rig will be accessible on /rig/dad. Tags will not be displayed.
+
+**BetaRigs**
+
+If you have BetaRigs among the pools, a special tag with a link to your rig (https://www.betarigs.com/rig/{rig_id}) will be shown. When rented, the tag will change color.
+
+If you want the tag to show on error when the rig is inaccessible, you have to manually enter the betarigs IDs in the configuration file:
+
+```json
+"beta" : [
+  "",
+  3340
+]
+```
 
 **Cgminer config:**
 

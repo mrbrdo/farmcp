@@ -1,11 +1,13 @@
 class Miner
-  attr_reader :host, :port, :name, :tags
+  attr_reader :host, :port, :name, :tags, :link, :beta
 
-  def initialize(host, port, name, tags)
+  def initialize(host, port, name, tags, link, beta)
     @host = host
     @port = port
     @name = name
     @tags = tags
+    @link = link
+    @beta = beta
   end
 
   def rpc
@@ -40,11 +42,20 @@ class Miner
       devs = rpc.cmd_devs["DEVS"].map do |dev|
         Hash.new.tap do |h|
           dev_keys.each_pair do |k, v|
-            h[k] = dev[v]
+            h[k] = k == :temp && !dev[v].nil? ? dev[v].round : dev[v]
           end
         end
       end
-      pool = rpc.cmd_pools["POOLS"].max_by do |pool|
+
+      pools = rpc.cmd_pools["POOLS"]
+
+      beta_id = pools.detect do |pool|
+        pool["URL"].include?("betarigs.com") && pool["User"].include?('-')
+      end.try(:[], 'User').try do |username|
+        username.split('-')[1]
+      end
+
+      pool = pools.max_by do |pool|
         pool["Last Share Time"] || 0
       end
 
@@ -57,15 +68,18 @@ class Miner
         host: host,
         port: port,
         name: name,
+        link: link,
         tags: tags,
+        beta: beta,
         devs: devs,
-        pool: pool["URL"]
+        pool: pool["URL"],
+        beta_id: beta_id
       }
     end
   rescue Timeout::Error
-    error(name || host, "timeout")
+    error(name || host, "timeout", tags, link, beta)
   rescue
-    error(name || host, $!.message)
+    error(name || host, $!.message, tags, link, beta)
   end
 
   class << self
@@ -73,10 +87,12 @@ class Miner
       if conf = JsonConfig.get
         names = Array(conf["names"])
         tags = Array(conf["tags"])
+        links = Array(conf["links"])
+        beta = Array(conf["beta"])
         conf["rigs"].each_with_index.map do |rig, num|
           addr = rig.strip.split(":")
           if addr[0].present?
-            new(addr[0], (addr[1] || 4028).to_i, names[num], Array(tags[num]))
+            new(addr[0], (addr[1] || 4028).to_i, names[num], Array(tags[num]), links[num], beta[num])
           end
         end
       else
@@ -87,11 +103,14 @@ class Miner
 
   private
 
-    def error(host, msg)
+    def error(host, msg, tags, link, beta)
       {
         host: "#{host} - #{msg}",
         devs: [],
-        pool: ""
+        pool: "",
+        link: link,
+        tags: tags,
+        beta_id: beta
       }
     end
 

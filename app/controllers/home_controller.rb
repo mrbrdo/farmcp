@@ -1,28 +1,43 @@
 class HomeController < ApplicationController
 
+  before_filter :authenticate_data, only: 'data'
+
   def dashboard
     render 'dashboard', layout: 'dashboard'
   end
 
   def data
-    data = if development?
-      JSON.parse(File.read(Rails.root.join('app/data/demo_data.json')))
-    else
+    respond_to do |format|
+      format.json { render json: get_data }
+    end
+  end
+
+  def rig
+    @link = params[:name]
+    render 'dashboard', layout: 'dashboard'
+  end
+
+private
+
+  def authenticate_data
+    authenticate unless params[:link].present?
+  end
+
+  def get_data
+    # if development?
+    #   JSON.parse(File.read(Rails.root.join('app/data/demo_data.json')))
+    #else
       rig_info = get_rig_info
+      rig_info.delete_if { |rig| rig[:link] != params[:link] } if params[:link].present?
 
       {
         btc_value: BtcValue.get,
         rig_info: rig_info,
         rig_overview: get_rig_overview(rig_info)
       }
-    end
-
-    respond_to do |format|
-      format.json { render json: data }
-    end
+    #end
   end
 
-private
   def get_rig_info
     Miner.all.map(&:get_info).compact
   end
