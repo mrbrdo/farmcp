@@ -24,18 +24,17 @@ private
   end
 
   def get_data
-    # if development?
-    #   JSON.parse(File.read(Rails.root.join('app/data/demo_data.json')))
-    #else
-      rig_info = get_rig_info
-      rig_info.delete_if { |rig| rig[:link] != params[:link] } if params[:link].present?
-
+    rig_info = get_rig_info
+    rig_info.delete_if { |rig| rig[:link] != params[:link] } if params[:link].present?
+    data = if rig_info.empty? && development?
+      JSON.parse(File.read(Rails.root.join('app/data/demo_data.json')))
+    else
       {
         btc_value: BtcValue.get,
         rig_info: rig_info,
         rig_overview: get_rig_overview(rig_info)
       }
-    #end
+    end
   end
 
   def get_rig_info
