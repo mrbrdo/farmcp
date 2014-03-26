@@ -1,13 +1,12 @@
 class Miner
-  attr_reader :host, :port, :name, :tags, :link, :beta
+  attr_reader :host, :port, :name, :tags, :link
 
-  def initialize(host, port, name, tags, link, beta)
+  def initialize(host, port, name, tags, link)
     @host = host
     @port = port
     @name = name
     @tags = tags
     @link = link
-    @beta = beta
   end
 
   def rpc
@@ -30,6 +29,15 @@ class Miner
     nil
   end
 
+  def beta_id(pools = rpc.cmd_pools["POOLS"])
+    pools.each do |pool|
+      if pool["URL"].include?("betarigs.com") && pool["User"].include?('-')
+        return pool["User"].split('-')[1]
+      end
+    end
+    nil
+  end
+
   def get_info
     Timeout::timeout(2) do
       dev_keys = {
@@ -48,13 +56,6 @@ class Miner
       end
 
       pools = rpc.cmd_pools["POOLS"]
-
-      beta_id = pools.detect do |pool|
-        pool["URL"].include?("betarigs.com") && pool["User"].include?('-')
-      end.try(:[], 'User').try do |username|
-        username.split('-')[1]
-      end
-
       pool = pools.max_by do |pool|
         pool["Last Share Time"] || 0
       end
@@ -70,16 +71,15 @@ class Miner
         name: name,
         link: link,
         tags: tags,
-        beta: beta,
         devs: devs,
         pool: pool["URL"],
-        beta_id: beta_id
+        beta_id: beta_id(pools)
       }
     end
   rescue Timeout::Error
-    error(name || host, "timeout", tags, link, beta)
+    error(name || host, "timeout", tags, link)
   rescue
-    error(name || host, $!.message, tags, link, beta)
+    error(name || host, $!.message, tags, link)
   end
 
   class << self
@@ -88,11 +88,10 @@ class Miner
         names = Array(conf["names"])
         tags = Array(conf["tags"])
         links = Array(conf["links"])
-        beta = Array(conf["beta"])
-        conf["rigs"].each_with_index.map do |rig, num|
+        Array(conf["rigs"]).each_with_index.map do |rig, num|
           addr = rig.strip.split(":")
           if addr[0].present?
-            new(addr[0], (addr[1] || 4028).to_i, names[num], Array(tags[num]), links[num], beta[num])
+            new(addr[0], (addr[1] || 4028).to_i, names[num], Array(tags[num]), links[num])
           end
         end
       else
@@ -103,14 +102,13 @@ class Miner
 
   private
 
-    def error(host, msg, tags, link, beta)
+    def error(host, msg, tags, link)
       {
         host: "#{host} - #{msg}",
         devs: [],
         pool: "",
         link: link,
-        tags: tags,
-        beta_id: beta
+        tags: tags
       }
     end
 

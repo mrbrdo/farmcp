@@ -1,40 +1,47 @@
 class HomeController < ApplicationController
-
-  before_filter :authenticate_data, only: 'data'
+  ALLOW_ALL_TOKEN = 'all'
+  skip_before_action :authenticate, only: [:data, :rig]
 
   def dashboard
+    session[:rig_allow] = ALLOW_ALL_TOKEN
+
     render 'dashboard', layout: 'dashboard'
   end
 
   def data
-    respond_to do |format|
-      format.json { render json: get_data }
+    if session[:rig_allow].blank?
+      render text: "Forbidden", status: 403
+    else
+      respond_to do |format|
+        format.json { render json: get_data }
+      end
     end
   end
 
   def rig
-    @link = params[:name]
+    session[:rig_allow] = params[:name] unless params[:name] == ALLOW_ALL_TOKEN
     render 'dashboard', layout: 'dashboard'
   end
 
 private
-
-  def authenticate_data
-    authenticate unless params[:link].present?
-  end
-
   def get_data
     rig_info = get_rig_info
-    rig_info.delete_if { |rig| rig[:link] != params[:link] } if params[:link].present?
     data = if rig_info.empty? && development?
-      JSON.parse(File.read(Rails.root.join('app/data/demo_data.json')))
+      development_data
     else
       {
         btc_value: BtcValue.get,
-        rig_info: rig_info,
-        rig_overview: get_rig_overview(rig_info)
+        rig_info: rig_info
       }
     end
+
+    if session[:rig_allow] != ALLOW_ALL_TOKEN
+      data[:rig_info].delete_if { |rig| session[:rig_allow].casecmp(rig[:link].to_s) != 0 }
+    end
+
+    data[:rig_overview] = get_rig_overview(data[:rig_info])
+
+    data
   end
 
   def get_rig_info
@@ -74,5 +81,20 @@ private
     end
 
     data
+  end
+
+  def development_data
+    deeper_symbolize(JSON.parse(File.read(Rails.root.join('app/data/demo_data.json'))))
+  end
+
+  def deeper_symbolize(hash)
+    return hash unless hash.kind_of?(Hash)
+    hash = hash.deep_symbolize_keys
+    hash.each_pair do |k, v|
+      if v.kind_of?(Array)
+        hash[k] = v.map { |av| deeper_symbolize(av) }
+      end
+    end
+    hash
   end
 end

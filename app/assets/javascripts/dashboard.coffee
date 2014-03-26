@@ -4,7 +4,7 @@
 btc_value = null
 use_btc_value = "btcde"
 hashrate_mh = 4.85
-rig_link = $(".link").text()
+single_rig = window.location.pathname.startsWith("/rig/")
 
 ip_regex = "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
 
@@ -15,20 +15,14 @@ toDollars = (value, precision = 2)->
     "$" + (hashrate_mh * value * btc_value[use_btc_value]).format(precision)
 
 updateData = ->
-  if rig_link
+  if single_rig
     $('#rig_overview').remove()
     $('#rig_pools').remove()
 
-  $.getJSON "/data.json?link=#{rig_link}", (data)->
+  $.getJSON "/data.json", (data)->
     btc_value = data.btc_value
     $('#btc_value h2.bitstamp').text("$#{btc_value.bitstamp.format(0)}")
     $('#btc_value h2.btcde').html("#{btc_value.btcde.format(0)}&euro;")
-
-    linked_rig = null
-
-    data.rig_info.each (rig)->
-      if (rig_link && rig.link == rig_link)
-        linked_rig = rig
 
     appendBuzzwordsLi = ($ul, title, value)->
       $li = $("<li></li>")
@@ -48,11 +42,11 @@ updateData = ->
 
     $('#rig_hashrate .change-rate').text('MH/s')
 
-    if rig_link && !linked_rig
-        $('#rig_hashrate .title').text("No such rig")
+    if data.rig_info.length == 0
+        $('#rig_hashrate .title').text(if single_rig then "Rig not found" else "No rigs found")
         $('#rig_hashrate .change-rate').text("")
 
-    unless rig_link
+    unless single_rig
       $('#rig_hashrate .value').text(data.rig_overview.mhs.format(2))
 
       $ul = $('#rig_overview ul').empty()
@@ -106,17 +100,18 @@ updateData = ->
           $li.addClass("low_hash_warning")
 
         reject_p = (100 * dev.rejected / dev.accepted).format(1)
-        line = "F: #{dev.fan_p}%"
-        line += " T: #{dev.temp} °C" unless rig_link
+        line = ""
+        line += "F: #{dev.fan_p}%" unless single_rig
+        line += " T: #{dev.temp} °C" unless single_rig
         $info_li = appendBuzzwordsLi($ul, "A: #{dev.accepted} R: #{reject_p}%" , line)
         $info_li.css("font-size", "15px")
 
       # this won't show the exception message when on link (/rig/moo) - that's intentional
-      rig_name = if rig_link then rig_link else (rig.name ? (if rig.host.match(ip_regex) then "Rig ##{rigIdx}" else rig.host))
+      rig_name = if single_rig then rig.link else (rig.name ? (if rig.host.match(ip_regex) then "Rig ##{rigIdx}" else rig.host))
       $title = $div.find("h1.rig_title")
       $title.addClass("small") if rig_name.length > 6
       $title.text("#{rig_name} - #{displayHashrate(total_hashrate)}")
-      $('#rig_hashrate .value').text(total_hashrate.format(2)) if linked_rig == rig
+      $('#rig_hashrate .value').text(total_hashrate.format(2))
 
       stripped_pool = if rig.pool.split(':')[1]?
         rig.pool.split(':')[1].replace(/^\/\//, '')
@@ -129,7 +124,7 @@ updateData = ->
         tag = "<a href='https://www.betarigs.com/rig/#{rig.beta_id}' target=_new>β-rigs</a>"
         createTag(tag, color, $div)
 
-      unless rig_link
+      unless single_rig
         rig.tags?.each (tag) ->
           if tag != ""
             color = if tag.match(/^\d+.?$/)

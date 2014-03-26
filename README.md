@@ -101,15 +101,6 @@ Dad's rig will be accessible on /rig/dad. Tags will not be displayed.
 
 If you have BetaRigs among the pools, a special tag with a link to your rig (https://www.betarigs.com/rig/{rig_id}) will be shown. When rented, the tag will change color.
 
-If you want the tag to show on error when the rig is inaccessible, you have to manually enter the betarigs IDs in the configuration file:
-
-```json
-"beta" : [
-  "",
-  3340
-]
-```
-
 **Cgminer config:**
 
 Replace 192.168.1.0 with your LAN, for example if your rig IP is 192.168.0.10, use 192.168.0.0:
