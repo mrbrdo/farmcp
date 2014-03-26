@@ -4,6 +4,7 @@
     %title Rig Dashboard
     = stylesheet_link_tag    "dashboard", media: "all"
     %link{href: "http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700", rel: "stylesheet", type: "text/css"}/
+    %meta{name: "single-rig", content: (action_name == "rig").to_s}
     = csrf_meta_tags
   %body
     = yield

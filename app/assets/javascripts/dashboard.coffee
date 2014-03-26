@@ -4,7 +4,7 @@
 btc_value = null
 use_btc_value = "btcde"
 hashrate_mh = 4.85
-single_rig = window.location.pathname.startsWith("/rig/")
+single_rig = $("meta[name='single-rig']").attr('content') == 'true'
 
 ip_regex = "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
 
