@@ -46,9 +46,9 @@ updateData = ->
         $('#rig_hashrate .title').text(if single_rig then "Rig not found" else "No rigs found")
         $('#rig_hashrate .change-rate').text("")
 
+    $('#rig_hashrate .value').text(data.rig_overview.mhs.format(2))
+    
     unless single_rig
-      $('#rig_hashrate .value').text(data.rig_overview.mhs.format(2))
-
       $ul = $('#rig_overview ul').empty()
       appendBuzzwordsLi($ul, 'Temp - max', data.rig_overview.max_temp.format(0) + " °C")
       appendBuzzwordsLi($ul, 'Fan - max', data.rig_overview.max_fan_p.format(0) + "%")
@@ -111,7 +111,6 @@ updateData = ->
       $title = $div.find("h1.rig_title")
       $title.addClass("small") if rig_name.length > 6
       $title.text("#{rig_name} - #{displayHashrate(total_hashrate)}")
-      $('#rig_hashrate .value').text(total_hashrate.format(2))
 
       stripped_pool = if rig.pool.split(':')[1]?
         rig.pool.split(':')[1].replace(/^\/\//, '')
