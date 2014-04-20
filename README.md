@@ -17,6 +17,9 @@ Write the following commands, one line at a time:
 \curl -sSL https://get.rvm.io | bash -s stable
 rvm install ruby-2.1.0
 
+bash
+rvm use ruby-2.1.0 --default
+
 cd ~
 git clone https://github.com/mrbrdo/farmcp.git
 cd farmcp
